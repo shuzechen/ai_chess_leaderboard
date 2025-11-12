@@ -62,13 +62,13 @@
                                 <th><input type="checkbox" id="select-all"></th>
                                 <th>Rank</th>
                                 <th>Player</th>
-                                <th class="sortable" data-column="Rating_Mu">Rating (μ) <span class="sort-arrow">↕</span></th>
-                                <th class="sortable" data-column="Rating_Sigma">Rating (σ) <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Rating_Mu">Rating (μ ± σ) <span class="sort-arrow">↕</span></th>
                                 <th class="sortable" data-column="Wins">Wins <span class="sort-arrow">↕</span></th>
                                 <th class="sortable" data-column="Draws">Draws <span class="sort-arrow">↕</span></th>
                                 <th class="sortable" data-column="Losses">Losses <span class="sort-arrow">↕</span></th>
                                 <th class="sortable" data-column="Games">Games <span class="sort-arrow">↕</span></th>
                                 <th class="sortable" data-column="Win_Rate">Win Rate <span class="sort-arrow">↕</span></th>
+                                <th>Prompts</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -139,6 +139,16 @@
                             <button id="export-csv" class="export-btn">Export as CSV</button>
                             <button id="export-json" class="export-btn">Export as JSON</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prompt Modal -->
+            <div id="prompt-modal" class="modal">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <div id="prompt-details">
+                        <!-- Prompt details will be populated by JavaScript -->
                     </div>
                 </div>
             </div>

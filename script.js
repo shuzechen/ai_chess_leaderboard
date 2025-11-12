@@ -81,7 +81,7 @@ function displayLeaderboard() {
     const tbody = document.getElementById('leaderboard-body');
 
     if (filteredData.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="11" class="loading">No players match current filters</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="12" class="loading">No players match current filters</td></tr>';
         return;
     }
 
@@ -132,13 +132,17 @@ function displayLeaderboard() {
                 </td>
                 <td>${rankDisplay}</td>
                 <td>${player.Player}</td>
-                <td>${player.Rating_Mu.toFixed(2)}</td>
-                <td>${player.Rating_Sigma.toFixed(2)}</td>
+                <td>${player.Rating_Mu.toFixed(2)} ± ${player.Rating_Sigma.toFixed(2)}</td>
                 <td>${player.Wins}</td>
                 <td>${player.Draws}</td>
                 <td>${player.Losses}</td>
                 <td>${player.Games}</td>
                 <td class="${winRateClass}">${(player.Win_Rate * 100).toFixed(1)}%</td>
+                <td onclick="event.stopPropagation()">
+                    <button class="prompt-btn" onclick="showPlayerPrompts('${player.Player}')">
+                        View Prompts
+                    </button>
+                </td>
                 <td onclick="event.stopPropagation()">
                     <button class="pin-btn ${isPinned ? 'pinned' : ''}"
                             onclick="togglePin('${player.Player}')">
@@ -914,19 +918,17 @@ function parseYAMLConfig(yamlText) {
     return config;
 }
 
-// Show player details modal with model and prompt information
-async function showPlayerDetails(playerName) {
+// Show player prompts in dedicated modal
+async function showPlayerPrompts(playerName) {
     const player = tournamentData.find(p => p.Player === playerName);
     if (!player) return;
 
-    const modal = document.getElementById('player-modal');
-    const detailsDiv = document.getElementById('player-details');
-
-    const winRateClass = getWinRateClass(player.Win_Rate);
+    const modal = document.getElementById('prompt-modal');
+    const detailsDiv = document.getElementById('prompt-details');
 
     // Show loading state first
     detailsDiv.innerHTML = `
-        <h2>${player.Player}</h2>
+        <h2>📝 ${player.Player} - AI Prompts</h2>
         <div class="loading">Loading player configuration...</div>
     `;
     modal.style.display = 'block';
@@ -934,9 +936,9 @@ async function showPlayerDetails(playerName) {
     // Load player configuration
     const config = await loadPlayerConfig(playerName);
 
-    // Build detailed player info
-    let modelInfo = '<div class="config-section"><h3>Model Information</h3><p>Configuration not available</p></div>';
-    let promptsInfo = '<div class="config-section"><h3>Prompts</h3><p>Configuration not available</p></div>';
+    // Build prompt info
+    let modelInfo = '<div class="config-section"><h3>🤖 Model Information</h3><p>Configuration not available</p></div>';
+    let promptsInfo = '<div class="config-section"><h3>📝 Prompts</h3><p>Configuration not available</p></div>';
 
     if (config && config.agents && config.agents.length > 0) {
         const agent = config.agents[0]; // Use first agent
@@ -963,7 +965,7 @@ async function showPlayerDetails(playerName) {
 
             promptsInfo = `
                 <div class="config-section">
-                    <h3>📝 Prompts</h3>
+                    <h3>📝 AI Prompts</h3>
                     ${systemPrompt ? `
                         <div class="prompt-section">
                             <h4>System Prompt:</h4>
@@ -977,6 +979,56 @@ async function showPlayerDetails(playerName) {
                         </div>
                     ` : ''}
                     ${!systemPrompt && !stepPrompt ? '<p>No prompts found in configuration</p>' : ''}
+                </div>
+            `;
+        }
+    }
+
+    detailsDiv.innerHTML = `
+        <h2>📝 ${player.Player} - AI Configuration</h2>
+        ${modelInfo}
+        ${promptsInfo}
+    `;
+}
+
+// Show player details modal with model and prompt information
+async function showPlayerDetails(playerName) {
+    const player = tournamentData.find(p => p.Player === playerName);
+    if (!player) return;
+
+    const modal = document.getElementById('player-modal');
+    const detailsDiv = document.getElementById('player-details');
+
+    const winRateClass = getWinRateClass(player.Win_Rate);
+
+    // Show loading state first
+    detailsDiv.innerHTML = `
+        <h2>${player.Player}</h2>
+        <div class="loading">Loading player configuration...</div>
+    `;
+    modal.style.display = 'block';
+
+    // Load player configuration
+    const config = await loadPlayerConfig(playerName);
+
+    // Build model info
+    let modelInfo = '<div class="config-section"><h3>🤖 Model Information</h3><p>Configuration not available</p></div>';
+
+    if (config && config.agents && config.agents.length > 0) {
+        const agent = config.agents[0]; // Use first agent
+
+        if (agent.model) {
+            modelInfo = `
+                <div class="config-section">
+                    <h3>🤖 Model Information</h3>
+                    <div class="model-info">
+                        <div class="model-item">
+                            <strong>Provider:</strong> ${agent.model.provider || 'Unknown'}
+                        </div>
+                        <div class="model-item">
+                            <strong>Model:</strong> ${agent.model.name || 'Unknown'}
+                        </div>
+                    </div>
                 </div>
             `;
         }
@@ -1021,7 +1073,6 @@ async function showPlayerDetails(playerName) {
         </div>
 
         ${modelInfo}
-        ${promptsInfo}
     `;
 }
 

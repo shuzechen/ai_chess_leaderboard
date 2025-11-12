@@ -71,6 +71,186 @@ header p {
     font-size: 1.5rem;
 }
 
+/* Feature Gate UI Elements */
+.experiment-badge {
+    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 10px;
+    animation: pulse-glow 2s infinite;
+}
+
+.admin-toggle {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.admin-toggle:hover {
+    background: #2c3e50;
+}
+
+.beta-badge {
+    background: #f39c12;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+/* Advanced Analytics Styles */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 1rem;
+}
+
+.analytics-card {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border-left: 4px solid #e74c3c;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.analytics-card h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Real-time Updates */
+.realtime-indicator {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    background: #d5f4e6;
+    border-radius: 8px;
+    border-left: 4px solid #27ae60;
+}
+
+.pulse-dot {
+    width: 12px;
+    height: 12px;
+    background: #27ae60;
+    border-radius: 50%;
+    margin-right: 10px;
+    animation: pulse 1.5s infinite;
+}
+
+/* Admin Panel Styles */
+.admin-section {
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.admin-section h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+}
+
+.feature-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.feature-toggle {
+    background: #95a5a6;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.feature-toggle.enabled {
+    background: #27ae60;
+}
+
+.feature-toggle.disabled {
+    background: #e74c3c;
+}
+
+.metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.metric-item {
+    background: white;
+    padding: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    border: 1px solid #ecf0f1;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #3498db;
+}
+
+.metric-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 0.5rem;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+    0%, 100% { box-shadow: 0 0 5px rgba(255, 107, 107, 0.5); }
+    50% { box-shadow: 0 0 20px rgba(255, 107, 107, 0.8); }
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+}
+
+/* Compact Table View (A/B Test Feature) */
+.compact-table th,
+.compact-table td {
+    padding: 8px;
+    font-size: 0.85rem;
+}
+
+.compact-table .rank-badge {
+    font-size: 0.8rem;
+}
+
+/* Enhanced Charts (A/B Test Feature) */
+.enhanced-chart {
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 1rem;
+    color: white;
+}
+
+.enhanced-chart canvas {
+    filter: brightness(1.1) contrast(1.1);
+}
+
 /* Main content */
 main {
     padding: 0 1rem;

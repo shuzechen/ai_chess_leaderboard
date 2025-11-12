@@ -6,6 +6,7 @@
     <title>AI Chess Tournament Rankings</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="feature-gates.js"></script>
 </head>
 <body>
     <div class="container">
@@ -16,6 +17,16 @@
                     <p>Tournament results from prompt-based game competition</p>
                 </div>
                 <div class="header-controls">
+                    <!-- Feature Gate Indicator -->
+                    <div id="experiment-badge" class="experiment-badge" style="display: none;">
+                        <span id="experiment-text">🧪 Beta User</span>
+                    </div>
+
+                    <!-- Admin Panel Toggle (only for demo) -->
+                    <button id="admin-toggle" class="admin-toggle" style="display: none;">
+                        ⚙️ Admin
+                    </button>
+
                     <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
                         <span class="theme-icon">🌙</span>
                     </button>
@@ -106,6 +117,37 @@
                 </div>
             </section>
 
+            <!-- Advanced Analytics Section (Feature Gated) -->
+            <section id="advanced-analytics-section" style="display: none;">
+                <h2>🚀 Advanced Analytics <span class="beta-badge">BETA</span></h2>
+
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <h3>Performance Trends</h3>
+                        <canvas id="trendsChart"></canvas>
+                    </div>
+
+                    <div class="analytics-card">
+                        <h3>AI Model Performance</h3>
+                        <div id="model-performance-data"></div>
+                    </div>
+
+                    <div class="analytics-card">
+                        <h3>Engagement Heatmap</h3>
+                        <div id="engagement-heatmap"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Real-time Updates Section (Feature Gated) -->
+            <section id="realtime-section" style="display: none;">
+                <h2>📡 Real-time Updates <span class="beta-badge">LIVE</span></h2>
+                <div class="realtime-indicator">
+                    <span class="pulse-dot"></span>
+                    <span>Connected to tournament feed</span>
+                </div>
+            </section>
+
             <!-- Player Details Modal -->
             <div id="player-modal" class="modal">
                 <div class="modal-content">
@@ -149,6 +191,36 @@
                     <span class="close">&times;</span>
                     <div id="prompt-details">
                         <!-- Prompt details will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Panel Modal (Feature Gates Management) -->
+            <div id="admin-modal" class="modal">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <div id="admin-panel-content">
+                        <h2>🛠️ Feature Gates Admin Panel</h2>
+
+                        <div class="admin-section">
+                            <h3>Current User</h3>
+                            <div id="user-info"></div>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>Active Experiments</h3>
+                            <div id="experiments-list"></div>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>Feature Controls</h3>
+                            <div id="feature-controls"></div>
+                        </div>
+
+                        <div class="admin-section">
+                            <h3>Engagement Metrics</h3>
+                            <div id="engagement-metrics"></div>
+                        </div>
                     </div>
                 </div>
             </div>

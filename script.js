@@ -1141,6 +1141,12 @@ function setupEventListeners() {
     const themeToggle = document.getElementById('theme-toggle');
     themeToggle.addEventListener('click', toggleTheme);
 
+    // Admin panel toggle
+    const adminToggle = document.getElementById('admin-toggle');
+    if (adminToggle) {
+        adminToggle.addEventListener('click', showAdminPanel);
+    }
+
     // Modal close functionality
     const modals = document.querySelectorAll('.modal');
     const closeBtns = document.querySelectorAll('.close');
@@ -1160,10 +1166,225 @@ function setupEventListeners() {
     };
 }
 
+// Feature Gate Integration
+function initializeFeatureGates() {
+    // Wait for feature gates to be ready
+    if (!window.featureGates) {
+        setTimeout(initializeFeatureGates, 100);
+        return;
+    }
+
+    console.log('🎯 Initializing Feature Gates Integration');
+
+    // Show experiment badge for non-control users
+    const experimentBadge = document.getElementById('experiment-badge');
+    const experimentText = document.getElementById('experiment-text');
+    const userGroup = window.featureGates.userGroup;
+
+    if (userGroup !== 'control') {
+        experimentBadge.style.display = 'block';
+        switch (userGroup) {
+            case 'test_a':
+                experimentText.textContent = '🧪 UI Beta Tester';
+                break;
+            case 'test_b':
+                experimentText.textContent = '📊 Analytics Beta';
+                break;
+            case 'premium':
+                experimentText.textContent = '⭐ Premium User';
+                break;
+        }
+    }
+
+    // Show admin toggle (for demo purposes)
+    document.getElementById('admin-toggle').style.display = 'block';
+
+    // Apply feature-gated functionality
+    applyFeatureGates();
+
+    // Track page view
+    window.metricsTracker.track('page_view', { userGroup });
+}
+
+function applyFeatureGates() {
+    const gates = window.featureGates;
+
+    // Advanced Analytics
+    if (gates.isFeatureEnabled('advanced_analytics')) {
+        document.getElementById('advanced-analytics-section').style.display = 'block';
+        gates.trackFeatureUsage('advanced_analytics');
+        initAdvancedAnalytics();
+    }
+
+    // Real-time Updates
+    if (gates.isFeatureEnabled('real_time_updates')) {
+        document.getElementById('realtime-section').style.display = 'block';
+        gates.trackFeatureUsage('real_time_updates');
+        initRealtimeUpdates();
+    }
+
+    // Compact Table View (A/B Test)
+    if (gates.isFeatureEnabled('compact_table_view')) {
+        document.getElementById('leaderboard-table').classList.add('compact-table');
+        gates.trackFeatureUsage('compact_table_view');
+    }
+
+    // Enhanced Charts (A/B Test)
+    if (gates.isFeatureEnabled('enhanced_charts')) {
+        document.querySelectorAll('.chart-container').forEach(container => {
+            container.classList.add('enhanced-chart');
+        });
+        gates.trackFeatureUsage('enhanced_charts');
+    }
+}
+
+function initAdvancedAnalytics() {
+    // Mock advanced analytics data
+    const modelPerformance = document.getElementById('model-performance-data');
+    modelPerformance.innerHTML = `
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-value">4.2</div>
+                <div class="metric-label">Avg AI Rating</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">67%</div>
+                <div class="metric-label">Model Accuracy</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">1.2s</div>
+                <div class="metric-label">Avg Response</div>
+            </div>
+        </div>
+    `;
+
+    // Engagement heatmap
+    const heatmap = document.getElementById('engagement-heatmap');
+    heatmap.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px;">
+            ${Array(35).fill().map((_, i) => {
+                const intensity = Math.random();
+                const color = `rgba(52, 152, 219, ${intensity})`;
+                return `<div style="width: 20px; height: 20px; background: ${color}; border-radius: 2px;"></div>`;
+            }).join('')}
+        </div>
+        <p style="font-size: 0.8rem; margin-top: 0.5rem; color: #7f8c8d;">
+            User interaction intensity over time
+        </p>
+    `;
+}
+
+function initRealtimeUpdates() {
+    // Simulate real-time updates
+    let updateCount = 0;
+    setInterval(() => {
+        updateCount++;
+        const indicator = document.querySelector('.realtime-indicator span:last-child');
+        if (indicator) {
+            indicator.textContent = `Connected - ${updateCount} updates received`;
+        }
+    }, 5000);
+}
+
+// Admin Panel Functions
+function showAdminPanel() {
+    const modal = document.getElementById('admin-modal');
+    const userInfo = document.getElementById('user-info');
+    const experimentsList = document.getElementById('experiments-list');
+    const featureControls = document.getElementById('feature-controls');
+    const engagementMetrics = document.getElementById('engagement-metrics');
+
+    // User Info
+    const adminData = window.featureGates.getAdminData();
+    userInfo.innerHTML = `
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-value">${adminData.userGroup}</div>
+                <div class="metric-label">User Group</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">${adminData.userId.substr(-6)}</div>
+                <div class="metric-label">User ID</div>
+            </div>
+        </div>
+    `;
+
+    // Active Experiments
+    const assignments = adminData.assignments;
+    experimentsList.innerHTML = Object.keys(assignments).length > 0 ? `
+        <div style="background: white; padding: 1rem; border-radius: 6px;">
+            ${Object.entries(assignments).map(([feature, data]) => `
+                <div class="feature-control">
+                    <span>${feature}</span>
+                    <span class="beta-badge">${data.variant}</span>
+                </div>
+            `).join('')}
+        </div>
+    ` : '<p>No active experiments for this user</p>';
+
+    // Feature Controls
+    const allFeatures = Object.keys(window.featureGates.featureFlags);
+    featureControls.innerHTML = `
+        <div style="background: white; padding: 1rem; border-radius: 6px; max-height: 300px; overflow-y: auto;">
+            ${allFeatures.map(feature => {
+                const isEnabled = window.featureGates.isFeatureEnabled(feature);
+                return `
+                    <div class="feature-control">
+                        <span>${feature}</span>
+                        <button class="feature-toggle ${isEnabled ? 'enabled' : 'disabled'}"
+                                onclick="toggleFeatureForDemo('${feature}', ${!isEnabled})">
+                            ${isEnabled ? 'ON' : 'OFF'}
+                        </button>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+
+    // Engagement Metrics
+    const metrics = window.metricsTracker.getConversionMetrics();
+    engagementMetrics.innerHTML = `
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <div class="metric-value">${metrics.engagementScore}</div>
+                <div class="metric-label">Engagement Score</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">${Math.round(metrics.timeOnPage)}</div>
+                <div class="metric-label">Time on Page (s)</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">${metrics.interactionRate.toFixed(1)}</div>
+                <div class="metric-label">Interactions/min</div>
+            </div>
+            <div class="metric-item">
+                <div class="metric-value">${metrics.featureUsage.playerDetails}</div>
+                <div class="metric-label">Player Views</div>
+            </div>
+        </div>
+    `;
+
+    modal.style.display = 'block';
+}
+
+function toggleFeatureForDemo(featureName, enabled) {
+    window.featureGates.updateFeatureFlag(featureName, enabled);
+    showAdminPanel(); // Refresh the panel
+    applyFeatureGates(); // Re-apply gates
+}
+
+// Track user interactions for A/B testing
+function trackInteraction(event, data = {}) {
+    if (window.metricsTracker) {
+        window.metricsTracker.track(event, data);
+    }
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     initializeTheme();
     loadTournamentData();
+    initializeFeatureGates();
 });
 
 // Handle keyboard navigation

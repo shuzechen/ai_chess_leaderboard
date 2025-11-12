@@ -31,6 +31,15 @@ Create a website that displays the tournament results with the following require
 - Export functionality
 - Dark/light theme toggle
 
+### Specifications (Advanced)
+1.	dynamic rankings: rank by final standing, win rate, and mu rating
+2.	allows users to pin one player to the top of the leaderboard
+3.	visually highlight the players with the following conditions
+  • Top 3 players
+  • Players with win rate > 80%
+4.	display the model for each player
+5.	display the prompts for each player
+
 ## Getting Started
 
 1. Clone this repository

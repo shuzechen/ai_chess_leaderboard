@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chess Tournament Rankings</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="title-section">
+                    <h1>AI Chess Tournament Rankings</h1>
+                    <p>Tournament results from prompt-based game competition</p>
+                </div>
+                <div class="header-controls">
+                    <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+                        <span class="theme-icon">🌙</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main>
+            <!-- Leaderboard Section -->
+            <section id="leaderboard-section">
+                <div class="section-header">
+                    <h2>Tournament Standings</h2>
+                    <div class="controls-panel">
+                        <div class="search-container">
+                            <input type="text" id="player-search" placeholder="Search players..." />
+                            <button id="search-clear">✕</button>
+                        </div>
+                        <div class="filter-container">
+                            <select id="filter-select">
+                                <option value="all">All Players</option>
+                                <option value="top10">Top 10</option>
+                                <option value="high-winrate">High Win Rate (≥70%)</option>
+                                <option value="medium-winrate">Medium Win Rate (50-70%)</option>
+                                <option value="low-winrate">Low Win Rate (<50%)</option>
+                            </select>
+                        </div>
+                        <div class="ranking-container">
+                            <select id="ranking-select">
+                                <option value="rank">Rank by Final Standing</option>
+                                <option value="winrate">Rank by Win Rate</option>
+                                <option value="rating">Rank by Mu Rating</option>
+                            </select>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="compare-btn" disabled>Compare Selected</button>
+                            <button id="export-btn">Export Data</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <table id="leaderboard-table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all"></th>
+                                <th class="sortable" data-column="Rank">Rank <span class="sort-arrow">↕</span></th>
+                                <th>Player</th>
+                                <th class="sortable" data-column="Rating_Mu">Rating (μ) <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Rating_Sigma">Rating (σ) <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Wins">Wins <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Draws">Draws <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Losses">Losses <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Games">Games <span class="sort-arrow">↕</span></th>
+                                <th class="sortable" data-column="Win_Rate">Win Rate <span class="sort-arrow">↕</span></th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body">
+                            <!-- Data will be populated by JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="statistics-section">
+                <h2>Tournament Statistics</h2>
+
+                <div class="charts-grid">
+                    <div class="chart-container">
+                        <h3>Win Rate Distribution</h3>
+                        <canvas id="winRateChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Rating Distribution</h3>
+                        <canvas id="ratingChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Games Statistics</h3>
+                        <canvas id="gamesChart"></canvas>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Top 10 Players Win Rates</h3>
+                        <canvas id="topPlayersChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Player Details Modal -->
+            <div id="player-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div id="player-details">
+                        <!-- Player details will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Player Comparison Modal -->
+            <div id="comparison-modal" class="modal">
+                <div class="modal-content large">
+                    <span class="close">&times;</span>
+                    <div id="comparison-content">
+                        <h2>Player Comparison</h2>
+                        <div id="comparison-details">
+                            <!-- Comparison will be populated by JavaScript -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Export Modal -->
+            <div id="export-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <div class="export-options">
+                        <h2>Export Tournament Data</h2>
+                        <div class="export-buttons">
+                            <button id="export-csv" class="export-btn">Export as CSV</button>
+                            <button id="export-json" class="export-btn">Export as JSON</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Generated from tournament data | Total Players: <span id="total-players"></span></p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
